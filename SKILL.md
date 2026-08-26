@@ -125,6 +125,32 @@ Use when the rebuild already exists and the work is to check whether it matches 
   - `diff-<viewport>.png`
   - `annotated-<viewport>.png`
 
+## Release evidence contract
+
+Do not treat a successful build or a single screenshot as a completed round trip. For every target that is reported as verified, retain a small evidence set with the same run identifier:
+
+| Evidence | Required content |
+| --- | --- |
+| Source | The measured source frame, with ownership and scale recorded |
+| Rebuild | A fresh coded or native render at the matching viewport and state |
+| Overlay | A 50% source/rebuild composite inspected for double edges and duplicated content |
+| Diff | An absolute pixel-difference image, with the comparison dimensions recorded |
+| Interaction | A log or screenshot proving the important state transitions still work |
+| Verdict | Blocking differences, accepted approximations, and the next action |
+
+Regenerate the complete set after every correction. If the target is SwiftUI or UIKit, distinguish an Apple-native implementation from a fixed-canvas calibration fixture. If the target is Web or React, label browser and platform substitutions as approximations. Never carry evidence from an older build into a newer verdict.
+
+## Public showcase gate
+
+Before publishing a case or its screenshots:
+
+1. Confirm that source material is user-owned, licensed, or used only for non-distributable analysis.
+2. Replace third-party brands, app artwork, copy, and cropped platform assets with original showcase material.
+3. Confirm the delivered interface is made from editable/native/code components, not a reference screenshot layer.
+4. Include the source boundary, target, viewport, verification command, and known limitations in the case README.
+
+If any gate is unresolved, publish the workflow documentation only and mark the case `local QA` or `revise`.
+
 ### Pixel-fidelity hard stop
 
 Do not return `pass` when any of these remains:
